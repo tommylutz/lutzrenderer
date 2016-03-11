@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.2)
 
 CONFIGURE_FILE(gtest-download/CMakeLists.txt.in
                gtest-download/CMakeLists.txt)
@@ -8,8 +8,8 @@ EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} --build .
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gtest-download )
 
 SET(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-ADD_SUBDIRECTORY(${CMAKE_BINARY_DIR}/gtest-src
-                 ${CMAKE_BINARY_DIR}/gtest-build )
+ADD_SUBDIRECTORY(${CMAKE_BINARY_DIR}/googletest-src
+                 ${CMAKE_BINARY_DIR}/googletest-build )
 
 
 PROJECT(LutzRenderer)
@@ -18,7 +18,6 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-ADD_SUBDIRECTORY(gtest-download)
 ADD_SUBDIRECTORY(main)
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(librend)
