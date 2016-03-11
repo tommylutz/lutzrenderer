@@ -10,9 +10,9 @@ TEST(NoopTest, NoopTest)
 TEST(RendererLineTest, SinglePixelTest)
 {
     MockImage img;
-    EXPECT_CALL(img, set_pixel(1,1,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(1,2,255)).Times(1);
     
     Renderer rend;
-    rend.draw_line(img,1,1,1,1,255);
+    rend.draw_line(img,1,2,3,4,255);
 }
 
