@@ -1,5 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.2)
 
+ENABLE_TESTING()
+
 CONFIGURE_FILE(gtest-download/CMakeLists.txt.in
                gtest-download/CMakeLists.txt)
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
