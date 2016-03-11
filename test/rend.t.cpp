@@ -1,7 +1,14 @@
+#include <gtest/gtest.h>
+#include "image_mock.h"
 
-
-
-int main(int argc, char ** argv)
+TEST(NoopTest, NoopTest)
 {
-return 0;
+    EXPECT_EQ(1,1);
 }
+
+TEST(NoopTest, FailTest)
+{
+    EXPECT_EQ(1,0);
+}
+
+
