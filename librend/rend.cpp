@@ -15,7 +15,7 @@ void Renderer::draw_line(ImageInterface &img,
                          int x1, int y1,
                          int graylevel)
 {
-    img.set_pixel(1,1,255);
+    img.set_pixel(x0,y0,graylevel);
 
 }
 
