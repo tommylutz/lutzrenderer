@@ -2,7 +2,6 @@
 #define _MOCK_LIBPNG_INTERFACE_H_
 
 #include "libpng_interface.h"
-#include "<gmock/gmock.h>"
 
 class Mocklibpng_Interface : public libpng_Interface {
  public:

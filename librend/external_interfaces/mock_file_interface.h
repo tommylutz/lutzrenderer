@@ -2,7 +2,6 @@
 #define _MOCK_FILE_INTERFACE_H_
 
 #include "file_interface.h"
-#include "<gmock/gmock.h>"
 
 class Mockfile_Interface : public file_Interface {
  public:

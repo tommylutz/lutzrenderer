@@ -1,8 +1,11 @@
 ADD_EXECUTABLE(rendtest.t.tsk
-               rend.t.cpp
-               image_mock.h )
+image_mock.h
+image_png.t.cpp
+rend.t.cpp
+)
 
 TARGET_LINK_LIBRARIES(rendtest.t.tsk
+                      png
                       librend gtest gmock gtest_main)
 
 

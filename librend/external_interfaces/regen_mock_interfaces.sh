@@ -11,7 +11,8 @@ for FILE in $(echo *.h | tr ' ' '\n' | grep -v "^mock_"); do
     echo "#define $INCL_GUARD"          >> $MOCK
     echo ""                             >> $MOCK
     echo "#include \"$FILE\""           >> $MOCK
-    echo "#include \"<gmock/gmock.h>\"" >> $MOCK
+    #Whoever includes this mock interface MUST include gmock.h first
+    #echo "#include \"<gmock/gmock.h>\"" >> $MOCK
     echo ""             >> $MOCK
     $GMOCK_GEN $FILE    >> $MOCK
     echo ""             >> $MOCK
