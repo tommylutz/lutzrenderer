@@ -1,7 +1,13 @@
+SET(LIBREND_SRCS
+    image_interface.h
+    image_png.cpp
+    image_png.h
+    rend.cpp
+    rend.h )
+
 ADD_LIBRARY(librend STATIC
-            rend.cpp 
-            rend.h 
-            image_interface.h)
+            ${LIBREND_SRCS} )
 
 TARGET_INCLUDE_DIRECTORIES(librend PUBLIC
-                           "${CMAKE_CURRENT_SOURCE_DIR}/" )
+                           "${CMAKE_CURRENT_SOURCE_DIR}/"
+                           "${CMAKE_CURRENT_SOURCE_DIR}/external_interfaces" )
