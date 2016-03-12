@@ -1,7 +1,7 @@
 #ifndef _MOCK_FILE_INTERFACE_H_
 #define _MOCK_FILE_INTERFACE_H_
 
-#include "file_interface.h"
+#include "/media/dev/opengl/lutzrenderer/librend/external_interfaces/file_interface.h"
 
 class Mockfile_Interface : public file_Interface {
  public:

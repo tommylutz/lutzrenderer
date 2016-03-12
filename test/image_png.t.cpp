@@ -4,6 +4,15 @@
 //before including the mock interfaces
 #include <mock_libpng_interface.h>
 #include <mock_file_interface.h>
+#include <image_png.h>
+
+using ::testing::Return;
+using ::testing::StrEq;
+using ::testing::_;
+
+#define DUMMY_FILEPTR ((FILE*)1)
+#define DUMMY_PNG_STRUCTP ((png_structp)2)
+#define DUMMY_PNG_INFOP ((png_infop)3)
 
 class ImagePngFixture : public ::testing::Test
 {
@@ -21,7 +30,52 @@ protected:
     file_Interface * i_file;
 };
 
-TEST_F(ImagePngFixture, ImagePngConstructor)
+TEST_F(ImagePngFixture, PixelCount)
 {
-    EXPECT_EQ(1,0) << "Leaving myself a failing test";
+    PngImage img(100,100, i_libpng, i_file);
+    EXPECT_EQ(10000, img.num_pixels());
+}
+
+TEST_F(ImagePngFixture, WriteTest)
+{
+    EXPECT_CALL(m_mockfile, fclose(DUMMY_FILEPTR))
+        .Times(1);
+
+    EXPECT_CALL(m_mocklibpng, png_create_write_struct(_,_,_,_))
+        .Times(1)
+        .WillOnce(Return(DUMMY_PNG_STRUCTP));
+
+    EXPECT_CALL(m_mocklibpng, png_create_info_struct(DUMMY_PNG_STRUCTP))
+        .Times(1)
+        .WillOnce(Return(DUMMY_PNG_INFOP));
+
+    jmp_buf jb;
+    EXPECT_CALL(m_mocklibpng, png_jmp_buf(_))
+        .Times(1)
+        .WillOnce(Return(&jb));
+
+    EXPECT_CALL(m_mockfile, fopen(StrEq("foo.png"),StrEq("wb")))
+        .Times(1)
+        .WillOnce(Return(DUMMY_FILEPTR));
+
+    EXPECT_CALL(m_mocklibpng, png_init_io(_,_))
+        .Times(1);
+
+    EXPECT_CALL(m_mocklibpng, png_set_IHDR(_,_,_,_,_,_,_,_,_))
+        .Times(1);
+
+    EXPECT_CALL(m_mocklibpng, png_write_png(_,_,_,_))
+        .Times(1);
+
+    EXPECT_CALL(m_mocklibpng, png_write_image(_,_))
+        .Times(1);
+
+    EXPECT_CALL(m_mocklibpng, png_write_end(_,_))
+        .Times(1);
+
+    EXPECT_CALL(m_mocklibpng, png_destroy_write_struct(_,_))
+        .Times(1);
+
+    PngImage img(100,100, i_libpng, i_file);
+    EXPECT_TRUE(img.write("foo.png"));
 }

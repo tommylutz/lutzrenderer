@@ -9,25 +9,25 @@
 class PngImage : public ImageInterface
 {
 public:
-    PngImage(const std::string& strFileName,
-             int width,
+    PngImage(int width,
              int height,
              libpng_Interface * p_i_libpng,
              file_Interface * p_i_file);
     virtual ~PngImage();
     virtual void set_pixel(int x, int y, unsigned char graylevel);
-    void close();
+    bool write(const std::string& strFilename);
+
+    int num_pixels() const;
 private:
     int m_width;
     int m_height;
-    std::string m_strFileName;
-    FILE * m_file;
     png_structp m_png_write_ptr;
     png_infop m_png_info_ptr;
 
     //External Interfaces
     libpng_Interface * i_libpng;
     file_Interface * i_file;
+    unsigned char * m_image_data;
 };
 
 

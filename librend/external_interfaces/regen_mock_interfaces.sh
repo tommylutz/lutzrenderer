@@ -1,12 +1,20 @@
 #!/bin/sh
 
-GMOCK_GEN=$(find ../../build/ -name 'gmock_gen.py' | head -n1)
+WORKDIR=$1
+if [ -z "$WORKDIR" ]; then
+    echo "Bad folder specified"
+    exit 1
+fi
 
-for FILE in $(echo *.h | tr ' ' '\n' | grep -v "^mock_"); do
-    MOCK="mock_$FILE"
+GMOCK_GEN=$(find $WORKDIR/../../build/ -name 'gmock_gen.py' | head -n1)
+
+find $WORKDIR/ -name 'mock_*.h' -exec rm {} \;
+
+for FILE in $(find $WORKDIR/ -name '*.h' | grep -v "^mock_"); do
+    MOCK="$WORKDIR/mock_$(basename $FILE)"
     rm -f $MOCK
         
-    INCL_GUARD="_$(echo $MOCK | tr '.' '_' | tr '[:lower:]' '[:upper:]')_"
+    INCL_GUARD="_$(echo $(basename "$MOCK") | tr '.' '_' | tr '[:lower:]' '[:upper:]')_"
     echo "#ifndef $INCL_GUARD"          >> $MOCK
     echo "#define $INCL_GUARD"          >> $MOCK
     echo ""                             >> $MOCK

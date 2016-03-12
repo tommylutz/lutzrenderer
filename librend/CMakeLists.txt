@@ -11,3 +11,5 @@ ADD_LIBRARY(librend STATIC
 TARGET_INCLUDE_DIRECTORIES(librend PUBLIC
                            "${CMAKE_CURRENT_SOURCE_DIR}/"
                            "${CMAKE_CURRENT_SOURCE_DIR}/external_interfaces" )
+
+ADD_SUBDIRECTORY(external_interfaces)
