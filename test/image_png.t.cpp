@@ -64,6 +64,9 @@ TEST_F(ImagePngFixture, WriteTest)
     EXPECT_CALL(m_mocklibpng, png_set_IHDR(_,_,_,_,_,_,_,_,_))
         .Times(1);
 
+    EXPECT_CALL(m_mocklibpng, png_set_rows(_,_,_))
+        .Times(1);
+
     EXPECT_CALL(m_mocklibpng, png_write_png(_,_,_,_))
         .Times(1);
 
