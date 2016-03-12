@@ -44,6 +44,7 @@ void PngImage::set_pixel(int x, int y, unsigned char graylevel)
 
 bool PngImage::write(const std::string& strFilename)
 {
+    png_bytepp image_rows = NULL;
     FILE * file = i_file->fopen(strFilename.c_str(),"wb");
     if(!file)
         return false;
@@ -71,6 +72,10 @@ bool PngImage::write(const std::string& strFilename)
     {
         i_libpng->png_destroy_write_struct(&png_ptr,&info_ptr);
         i_file->fclose(file);
+        if(image_rows)
+        {
+            delete[] image_rows;
+        }
         return false;
     }
 
@@ -86,18 +91,16 @@ bool PngImage::write(const std::string& strFilename)
                  PNG_COMPRESSION_TYPE_DEFAULT,
                  PNG_FILTER_TYPE_DEFAULT);
     
+    image_rows = new png_byte*[m_height];
+    for(int i=0; i<m_height; ++i)
+        image_rows[i] = &m_image_data[m_width*i];
+
+    i_libpng->png_set_rows(png_ptr, info_ptr, image_rows);
     i_libpng->png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
-    {
-        unsigned char ** rows = new unsigned char*[m_height];
-        for(int i=0; i<m_height; ++i)
-            rows[i] = &m_image_data[m_width*i];
+    delete[] image_rows;
+    image_rows = NULL;
 
-        i_libpng->png_write_image(png_ptr, rows);
-        delete[] rows;
-    }
-
-    i_libpng->png_write_end(png_ptr, info_ptr);
     i_libpng->png_destroy_write_struct(&png_ptr, &info_ptr);
     i_file->fclose(file);
     return true;

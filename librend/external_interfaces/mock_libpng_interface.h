@@ -23,6 +23,8 @@ class Mocklibpng_Interface : public libpng_Interface {
       void(png_structp png_ptr, png_bytepp image));
   MOCK_METHOD1(png_jmp_buf,
       jmp_buf*(png_structp png_ptr));
+  MOCK_METHOD3(png_set_rows,
+      void(png_structp png_ptr, png_infop info_ptr, png_bytepp row_pointers));
 };
 
 #endif

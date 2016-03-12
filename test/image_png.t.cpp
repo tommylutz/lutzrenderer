@@ -67,12 +67,6 @@ TEST_F(ImagePngFixture, WriteTest)
     EXPECT_CALL(m_mocklibpng, png_write_png(_,_,_,_))
         .Times(1);
 
-    EXPECT_CALL(m_mocklibpng, png_write_image(_,_))
-        .Times(1);
-
-    EXPECT_CALL(m_mocklibpng, png_write_end(_,_))
-        .Times(1);
-
     EXPECT_CALL(m_mocklibpng, png_destroy_write_struct(_,_))
         .Times(1);
 

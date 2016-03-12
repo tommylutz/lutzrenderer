@@ -68,6 +68,13 @@ public:
         return &(png_jmpbuf(png_ptr));
     }
 
+    virtual void png_set_rows(png_structp png_ptr, 
+                              png_infop info_ptr, 
+                              png_bytepp row_pointers)
+    {
+        ::png_set_rows(png_ptr, info_ptr, row_pointers);
+    }
+
 
 };
 
