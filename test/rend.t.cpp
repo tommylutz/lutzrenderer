@@ -16,6 +16,17 @@ TEST(RendererLineTest, SinglePixelTest)
     rend.draw_line(img,1,2,1,2,255);
 }
 
+TEST(RendererLineTest, SinglePixelTestDifferentGrayLevelTest)
+{
+    MockImage img;
+    EXPECT_CALL(img, set_pixel(1,2,100)).Times(1);
+    
+    Renderer rend;
+    rend.draw_line(img,1,2,1,2,100);
+}
+
+
+
 TEST(RendererLineTest, HorizontalLineTest)
 {
     MockImage img;
@@ -109,5 +120,50 @@ TEST(RendererLineTest, VerticalLineTestBottomToTop)
     rend.draw_line(img,
                    2,8, 
                    2,9,
+                   255);
+}
+
+TEST(RendererLineTest, ShortShallowLineTest)
+{
+    MockImage img;
+    EXPECT_CALL(img, set_pixel(0,0,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(1,0,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(2,1,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(3,1,255)).Times(1);
+    Renderer rend;
+    rend.draw_line(img,
+                   0,0, 
+                   3,1,
+                   255);
+}
+
+TEST(RendererLineTest, LongShallowLineTest)
+{
+    MockImage img;
+    EXPECT_CALL(img, set_pixel(0,0,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(1,0,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(2,1,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(3,1,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(4,1,255)).Times(1);
+    Renderer rend;
+    rend.draw_line(img,
+                   0,0, 
+                   4,1,
+                   255);
+}
+
+TEST(RendererLineTest, LongSteepLineTest)
+{
+    MockImage img;
+    EXPECT_CALL(img, set_pixel(0,0,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(0,1,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(0,2,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(1,3,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(1,4,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(1,5,255)).Times(1);
+    Renderer rend;
+    rend.draw_line(img,
+                   0,0, 
+                   1,5,
                    255);
 }
