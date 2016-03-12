@@ -17,19 +17,8 @@ void Renderer::draw_line(ImageInterface &img,
                          int x1, int y1,
                          int graylevel)
 {
-    bool swapped = false;
-    if(abs(x0-x1) < abs(y0-y1))
-    {
-        std::swap(x0,y0);
-        std::swap(x1,y1);
-        swapped = true;
-    }
-
-    if(x0 > x1)
-    {
-        std::swap(x0,x1);
-        std::swap(y0,y1);
-    }
+    const bool x_and_y_swapped = 
+        normalize_coordinates_for_drawing_line(x0, y0, x1, y1);
 
     float pct_done = 0;
     const float y_total_dist = ((float)(y1-y0));
@@ -39,7 +28,7 @@ void Renderer::draw_line(ImageInterface &img,
     {
         pct_done = x_total_dist?(((float)(x-x0))/x_total_dist):0;
         int y = round(y0+pct_done*y_total_dist);
-        if(swapped)
+        if(x_and_y_swapped)
             img.set_pixel(y,x,graylevel);
         else
             img.set_pixel(x,y,graylevel);
