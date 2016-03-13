@@ -9,6 +9,7 @@
 using ::testing::Return;
 using ::testing::StrEq;
 using ::testing::_;
+using ::testing::StrictMock;
 
 #define DUMMY_FILEPTR ((FILE*)1)
 #define DUMMY_PNG_STRUCTP ((png_structp)2)
@@ -23,10 +24,10 @@ public:
         i_libpng = &m_mocklibpng;
     }
 protected:
-    Mocklibpng_Interface m_mocklibpng;
+    StrictMock<Mocklibpng_Interface> m_mocklibpng;
     libpng_Interface * i_libpng;
 
-    Mockfile_Interface m_mockfile;
+    StrictMock<Mockfile_Interface> m_mockfile;
     file_Interface * i_file;
 };
 
@@ -36,7 +37,7 @@ TEST_F(ImagePngFixture, PixelCount)
     EXPECT_EQ(10000, img.num_pixels());
 }
 
-TEST_F(ImagePngFixture, WriteTest)
+TEST_F(ImagePngFixture, SuccessfulWriteTest)
 {
     EXPECT_CALL(m_mockfile, fclose(DUMMY_FILEPTR))
         .Times(1);
@@ -76,3 +77,60 @@ TEST_F(ImagePngFixture, WriteTest)
     PngImage img(100,100, i_libpng, i_file);
     EXPECT_TRUE(img.write("foo.png"));
 }
+
+TEST_F(ImagePngFixture, FailedToOpenFile)
+{
+    EXPECT_CALL(m_mockfile, fopen(_,_))
+        .Times(1)
+        .WillOnce(Return((FILE*)NULL));
+    
+    PngImage img(100,100, i_libpng, i_file);
+    EXPECT_FALSE(img.write("foo.png"));
+}
+
+TEST_F(ImagePngFixture, FailedToAllocPngPtr)
+{
+    EXPECT_CALL(m_mockfile, fopen(_,_))
+        .Times(1)
+        .WillOnce(Return(DUMMY_FILEPTR));
+
+    EXPECT_CALL(m_mocklibpng, png_create_write_struct(_,_,_,_))
+        .Times(1)
+        .WillOnce(Return((png_structp)NULL));
+
+    EXPECT_CALL(m_mockfile, fclose(_))
+        .Times(1);
+
+    PngImage img(100, 100, i_libpng, i_file);
+    EXPECT_FALSE(img.write("foo.png"));
+}
+
+TEST_F(ImagePngFixture, FailedToAllocInfoPtr)
+{
+    EXPECT_CALL(m_mockfile, fopen(_,_))
+        .Times(1)
+        .WillOnce(Return(DUMMY_FILEPTR));
+
+    EXPECT_CALL(m_mockfile, fclose(DUMMY_FILEPTR))
+        .Times(1);
+
+    EXPECT_CALL(m_mocklibpng, png_create_write_struct(_,_,_,_))
+        .Times(1)
+        .WillOnce(Return(DUMMY_PNG_STRUCTP));
+
+    EXPECT_CALL(m_mocklibpng, png_create_info_struct(DUMMY_PNG_STRUCTP))
+        .Times(1)
+        .WillOnce(Return((png_infop)0));
+
+    EXPECT_CALL(m_mocklibpng, png_destroy_write_struct(_,_))
+        .Times(1);
+
+    PngImage img(100, 100, i_libpng, i_file);
+    EXPECT_FALSE(img.write("foo.png"));
+    
+    
+
+
+}
+
+
