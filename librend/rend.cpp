@@ -17,6 +17,9 @@ void Renderer::draw_line(ImageInterface &img,
                          int x1, int y1,
                          int graylevel)
 {
+    //TODO: See how lean we can get this function. Use valgrind or other
+    //profiling tools. The tutorial shows a methoid for eliminating all floating point 
+    //variables in this func. No multiplications or divisions
     const bool x_and_y_swapped = 
         normalize_coordinates_for_drawing_line(x0, y0, x1, y1);
 

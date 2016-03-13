@@ -18,7 +18,7 @@ for FILE in $(find $WORKDIR/ -name '*.h' | grep -v "^mock_"); do
     echo "#ifndef $INCL_GUARD"          >> $MOCK
     echo "#define $INCL_GUARD"          >> $MOCK
     echo ""                             >> $MOCK
-    echo "#include \"$FILE\""           >> $MOCK
+    echo "#include \"$(basename $FILE)\""           >> $MOCK
     #Whoever includes this mock interface MUST include gmock.h first
     #echo "#include \"<gmock/gmock.h>\"" >> $MOCK
     echo ""             >> $MOCK

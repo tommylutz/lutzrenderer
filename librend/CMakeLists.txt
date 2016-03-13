@@ -3,7 +3,9 @@ SET(LIBREND_SRCS
     image_png.cpp
     image_png.h
     rend.cpp
-    rend.h )
+    rend.h
+    model.cpp
+    model.h )
 
 ADD_LIBRARY(librend STATIC
             ${LIBREND_SRCS} )

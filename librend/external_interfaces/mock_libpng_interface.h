@@ -1,7 +1,7 @@
 #ifndef _MOCK_LIBPNG_INTERFACE_H_
 #define _MOCK_LIBPNG_INTERFACE_H_
 
-#include "/media/dev/opengl/lutzrenderer/librend/external_interfaces/libpng_interface.h"
+#include "libpng_interface.h"
 
 class Mocklibpng_Interface : public libpng_Interface {
  public:

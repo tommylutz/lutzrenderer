@@ -17,6 +17,11 @@ public:
     {
         ::fclose(file);
     }
+
+    virtual char * fgets(char * buf, int num, FILE * file)
+    {
+        return ::fgets(buf,num,file);
+    }
 };
 
 
