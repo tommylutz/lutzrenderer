@@ -13,9 +13,9 @@ public:
         return ::fopen(fname,mode);
     }
 
-    virtual void fclose(FILE * file)
+    virtual int fclose(FILE * file)
     {
-        ::fclose(file);
+        return ::fclose(file);
     }
 
     virtual char * fgets(char * buf, int num, FILE * file)

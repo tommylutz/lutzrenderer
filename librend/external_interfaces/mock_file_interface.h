@@ -8,7 +8,7 @@ class Mockfile_Interface : public file_Interface {
   MOCK_METHOD2(fopen,
       FILE*(const char * fname, const char * mode));
   MOCK_METHOD1(fclose,
-      void(FILE * file));
+      int(FILE * file));
   MOCK_METHOD3(fgets,
       char*(char * buf, int num, FILE * file));
 };

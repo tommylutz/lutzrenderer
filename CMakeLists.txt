@@ -2,6 +2,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.2)
 
 ENABLE_TESTING()
 
+SET(CMAKE_CXX_FLAGS "-std=c++11")
+
 CONFIGURE_FILE(gtest-download/CMakeLists.txt.in
                gtest-download/CMakeLists.txt)
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
