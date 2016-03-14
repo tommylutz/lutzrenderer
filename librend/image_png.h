@@ -19,8 +19,6 @@ public:
 
     int num_pixels() const;
 private:
-    int m_width;
-    int m_height;
     png_structp m_png_write_ptr;
     png_infop m_png_info_ptr;
 

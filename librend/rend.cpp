@@ -12,6 +12,18 @@ Renderer::~Renderer()
 {
 }
 
+void Renderer::draw_line(ImageInterface& img,
+                   double x0, double y0, 
+                   double x1, double y1,
+                   int graylevel)
+{
+    draw_line(  img,
+                static_cast<int>(round(x0)), static_cast<int>(round(y0)),
+                static_cast<int>(round(x1)), static_cast<int>(round(y1)),
+                graylevel );
+}
+
+
 void Renderer::draw_line(ImageInterface &img,
                          int x0, int y0,
                          int x1, int y1,

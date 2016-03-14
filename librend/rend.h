@@ -12,6 +12,10 @@ public:
                    int x0, int y0, 
                    int x1, int y1,
                    int graylevel);
+    void draw_line(ImageInterface& img,
+                   double x0, double y0, 
+                   double x1, double y1,
+                   int graylevel);
 private:
     inline bool normalize_coordinates_for_drawing_line(
                                         int &x0, int &y0,

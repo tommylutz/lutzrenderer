@@ -1,10 +1,10 @@
 #include <iostream>
 #include <rend.h>
 #include <image_png.h>
+#include <model.h>
 
-int main(int argc, char ** argv)
+void draw_sample_image(const char * filename)
 {
-    std::cout << "Hello world\n";
     libpng_Interface i_libpng;
     file_Interface i_file;;
     PngImage img(1000,1000, &i_libpng, &i_file);
@@ -24,6 +24,74 @@ int main(int argc, char ** argv)
     rend.draw_line(img, 999, 999, 999, 0,   255);
     rend.draw_line(img, 999, 0,   0,   0,   255);
 
-    img.write("./foo.png");
+    img.write(filename);
+}
+
+
+int main(int argc, char ** argv)
+{
+    if(argc < 2)
+    {
+        printf("Drawing sample image to ./foo.png\n");
+        draw_sample_image("./foo.png");
+        return 0;
+    }
+    else
+    {
+        libpng_Interface i_libpng;
+        file_Interface i_file;;
+        printf("Attempting to load model from file [%s]\n",argv[1]);
+        Model model;
+        if(!model.load_from_file(argv[1], i_file))
+        {
+            printf("Failed to load model\n");
+            return 1;
+        }
+        printf("Total vertexes: %d\nTotal faces: %d\n",
+                model.num_vertexes(), 
+                model.num_faces());
+        printf("Ranges:\n");
+        printf(" x (%f to %f)\n", model.xrange().first, model.xrange().second);
+        printf(" y (%f to %f)\n", model.yrange().first, model.yrange().second);
+        printf(" z (%f to %f)\n", model.zrange().first, model.zrange().second);
+
+        double xoff = -1.*model.xrange().first;
+        double yoff = -1.*model.yrange().first;
+        double zoff = -1.*model.zrange().first;
+
+        PngImage img(1000,1000, &i_libpng, &i_file);
+        
+        double scale = (std::min(img.width(), img.height())-1.) / 
+                       std::max(model.xrange().second - model.xrange().first,
+                                model.yrange().second - model.yrange().first );
+
+        printf("Offsets:\n x=%f\n y=%f\n z=%f\n scale=%f\n",
+                xoff, yoff, zoff, scale);
+    
+        Renderer rend;
+
+        const int num_faces = model.num_faces();
+        for(int facenum=0; facenum<num_faces; ++facenum)
+        {
+            //TODO: This assumes each face has only 3 vertexes.
+            const Face& face = model.face_at(facenum);
+            Vertex v1 = model.vertex_at(face.id1()).translate(xoff,yoff,zoff,scale);
+            Vertex v2 = model.vertex_at(face.id2()).translate(xoff,yoff,zoff,scale);
+            Vertex v3 = model.vertex_at(face.id3()).translate(xoff,yoff,zoff,scale);
+            rend.draw_line(img, v1.x(), v1.y(), v2.x(), v2.y(), 255);
+            rend.draw_line(img, v2.x(), v2.y(), v3.x(), v3.y(), 255);
+            rend.draw_line(img, v3.x(), v3.y(), v1.x(), v1.y(), 255);
+        }
+
+        if(img.write("./foo.png"))
+        {
+            printf("Wrote an x-y plot of your model to ./foo.png!\n");
+        }
+        else
+        {
+            printf("Failed to write ./foo.png!\n");
+        }
+    }
+        
     return 0;
 }

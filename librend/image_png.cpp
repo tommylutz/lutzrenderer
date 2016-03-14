@@ -10,11 +10,11 @@ PngImage::PngImage(
              int height,
              libpng_Interface *p_i_libpng,
              file_Interface * p_i_file) :
-    m_width(width),
-    m_height(height),
+    ImageInterface(width, height),
     i_libpng(p_i_libpng),
     i_file(p_i_file)
 {
+    //TODO: Move this error checking into base class
     if(width <= 0 || height <= 0)
         throw std::invalid_argument("Invalid width/height provided");
 
@@ -93,7 +93,7 @@ bool PngImage::write(const std::string& strFilename)
     
     image_rows = new png_byte*[m_height];
     for(int i=0; i<m_height; ++i)
-        image_rows[i] = &m_image_data[m_width*i];
+        image_rows[m_height-i-1] = &m_image_data[m_width*i];
 
     i_libpng->png_set_rows(png_ptr, info_ptr, image_rows);
     i_libpng->png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
