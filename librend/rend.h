@@ -8,6 +8,12 @@ class Renderer
 public:
     Renderer();
     ~Renderer();
+
+    void draw_line_ordered(ImageInterface& img, 
+                   int x0, int y0, 
+                   int x1, int y1,
+                   int graylevel);
+
     void draw_line(ImageInterface& img, 
                    int x0, int y0, 
                    int x1, int y1,

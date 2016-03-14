@@ -3,6 +3,8 @@
 #include <rend.h>
 
 using ::testing::AtLeast;
+using ::testing::InSequence;
+using ::testing::NiceMock;
 
 TEST(NoopTest, NoopTest)
 {
@@ -142,6 +144,7 @@ TEST(RendererLineTest, ShortShallowLineTest)
 TEST(RendererLineTest, LongShallowLineTest)
 {
     MockImage img;
+    
     EXPECT_CALL(img, set_pixel(0,0,255)).Times(1);
     EXPECT_CALL(img, set_pixel(1,0,255)).Times(1);
     EXPECT_CALL(img, set_pixel(2,1,255)).Times(1);
@@ -170,7 +173,7 @@ TEST(RendererLineTest, LongSteepLineTest)
                    255);
 }
 
-TEST(RendererFillTest, FillTriangle)
+/*TEST(RendererFillTest, FillTriangle)
 {
     MockImage img;
     EXPECT_CALL(img, set_pixel(0,0,255)).Times(AtLeast(1));
@@ -191,4 +194,49 @@ TEST(RendererFillTest, FillTriangle)
                        2,2,
                        4,0,
                        255);
+}*/
+
+TEST(PolyTracer, DrawLineOrdered)
+{
+    MockImage img;
+    Renderer rend;
+
+    {
+        InSequence dummy;
+        EXPECT_CALL(img, set_pixel(0,0,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(0,1,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(0,2,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(1,3,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(1,4,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(1,5,255)).Times(1);
+    }
+    rend.draw_line_ordered( img,
+                            0, 0,
+                            1, 5,
+                            255 );
+}
+
+TEST(PolyTracer, DrawLineOrdered_Long)
+{
+    MockImage img;
+    Renderer rend;
+
+    {
+        InSequence dummy;
+        EXPECT_CALL(img, set_pixel(1, 1,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(2, 1,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(3, 2,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(4, 2,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(5, 3,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(6, 3,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(7, 3,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(8, 4,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(9, 4,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(10,5,255)).Times(1);
+        EXPECT_CALL(img, set_pixel(11,5,255)).Times(1);
+    }
+    rend.draw_line_ordered( img,
+                            1,  1,
+                            11, 5,
+                            255 );
 }
