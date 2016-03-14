@@ -2,6 +2,8 @@
 #include "image_mock.h"
 #include <rend.h>
 
+using ::testing::AtLeast;
+
 TEST(NoopTest, NoopTest)
 {
     EXPECT_EQ(1,1);
@@ -166,4 +168,27 @@ TEST(RendererLineTest, LongSteepLineTest)
                    0,0, 
                    1,5,
                    255);
+}
+
+TEST(RendererFillTest, FillTriangle)
+{
+    MockImage img;
+    EXPECT_CALL(img, set_pixel(0,0,255)).Times(AtLeast(1));
+    EXPECT_CALL(img, set_pixel(1,0,255)).Times(AtLeast(1));
+    EXPECT_CALL(img, set_pixel(2,0,255)).Times(AtLeast(1));
+    EXPECT_CALL(img, set_pixel(3,0,255)).Times(AtLeast(1));
+    EXPECT_CALL(img, set_pixel(4,0,255)).Times(AtLeast(1));
+
+    EXPECT_CALL(img, set_pixel(1,1,255)).Times(AtLeast(1));
+    EXPECT_CALL(img, set_pixel(2,1,255)).Times(AtLeast(1));
+    EXPECT_CALL(img, set_pixel(3,1,255)).Times(AtLeast(1));
+ 
+    EXPECT_CALL(img, set_pixel(2,2,255)).Times(AtLeast(1));
+
+    Renderer rend;
+    rend.fill_triangle(img, 
+                       0,0,
+                       2,2,
+                       4,0,
+                       255);
 }

@@ -16,6 +16,24 @@ public:
                    double x0, double y0, 
                    double x1, double y1,
                    int graylevel);
+    void fill_triangle(ImageInterface &img,
+                   int x0, int y0, 
+                   int x1, int y1,
+                   int x2, int y2,
+                   int graylevel);
+
+    template <typename T>
+    void draw_triangle(ImageInterface & img,
+                       const T& p1,
+                       const T& p2,
+                       const T& p3,
+                       int graylevel)
+    {
+        draw_line(img, p1.x(), p1.y(), p2.x(), p2.y(), graylevel);
+        draw_line(img, p2.x(), p2.y(), p3.x(), p3.y(), graylevel);
+        draw_line(img, p3.x(), p3.y(), p1.x(), p1.y(), graylevel);
+    }
+                    
 private:
     inline bool normalize_coordinates_for_drawing_line(
                                         int &x0, int &y0,

@@ -78,9 +78,7 @@ int main(int argc, char ** argv)
             Vertex v1 = model.vertex_at(face.id1()).translate(xoff,yoff,zoff,scale);
             Vertex v2 = model.vertex_at(face.id2()).translate(xoff,yoff,zoff,scale);
             Vertex v3 = model.vertex_at(face.id3()).translate(xoff,yoff,zoff,scale);
-            rend.draw_line(img, v1.x(), v1.y(), v2.x(), v2.y(), 255);
-            rend.draw_line(img, v2.x(), v2.y(), v3.x(), v3.y(), 255);
-            rend.draw_line(img, v3.x(), v3.y(), v1.x(), v1.y(), 255);
+            rend.draw_triangle(img, v1, v2, v3, 255);
         }
 
         if(img.write("./foo.png"))

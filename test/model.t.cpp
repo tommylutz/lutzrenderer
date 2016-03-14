@@ -63,9 +63,9 @@ TEST(Model, ModelLoadsVertexes)
 
     EXPECT_TRUE(model.load_from_file("dummy.obj",i_file));
     ASSERT_EQ(3, model.num_vertexes());
-    EXPECT_EQ(Vertex(1.234,2.512,-3.6381), model.vertex_at(0));
-    EXPECT_EQ(Vertex(2,    3,     4     ), model.vertex_at(1));
-    EXPECT_EQ(Vertex(5,    6,     7     ), model.vertex_at(2));
+    EXPECT_EQ(Vertex(1.234,2.512,-3.6381), model.vertex_at(1));
+    EXPECT_EQ(Vertex(2,    3,     4     ), model.vertex_at(2));
+    EXPECT_EQ(Vertex(5,    6,     7     ), model.vertex_at(3));
 }
 
 TEST(Model, ModelLoadsFaces)
@@ -75,7 +75,7 @@ TEST(Model, ModelLoadsFaces)
         {   "v 1.234 2.512 -3.6381\n"        ,
             "v 2 3 4\n",
             "v 5 6 7\n",
-            "f 0/5/23 1/5/2 2/56/1\n",
+            "f 1/5/23 2/5/2 3/56/1\n",
             "Another line\n"   ,
             "foo bar bat baz\n",
             NULL
@@ -86,6 +86,6 @@ TEST(Model, ModelLoadsFaces)
     EXPECT_EQ(1,model.load_from_file("dummy.obj",i_file));
     EXPECT_EQ(3, model.num_vertexes());
     ASSERT_EQ(1, model.num_faces());
-    EXPECT_EQ(Face(0,1,2),model.face_at(0));
+    EXPECT_EQ(Face(1,2,3),model.face_at(0));
 }
 

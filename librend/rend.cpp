@@ -50,3 +50,10 @@ void Renderer::draw_line(ImageInterface &img,
     }
 }
 
+void Renderer::fill_triangle(ImageInterface &img,
+               int x0, int y0, 
+               int x1, int y1,
+               int x2, int y2,
+               int graylevel)
+{
+}
