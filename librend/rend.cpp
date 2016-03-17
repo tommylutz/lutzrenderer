@@ -3,6 +3,7 @@
 #include "image_interface.h"
 #include <math.h>
 #include <stdlib.h>
+#include "cursor.h"
 
 Renderer::Renderer()
 {
@@ -29,8 +30,8 @@ void Renderer::draw_line(ImageInterface &img,
                          int x1, int y1,
                          int graylevel)
 {
-    draw_line_ordered(img,x0,y0,x1,y1,graylevel);
-    return;
+    //draw_line_ordered(img,x0,y0,x1,y1,graylevel);
+    //return;
     //TODO: See how lean we can get this function. Use valgrind or other
     //profiling tools. The tutorial shows a methoid for eliminating all floating point 
     //variables in this func. No multiplications or divisions
@@ -114,7 +115,6 @@ void Renderer::draw_line_ordered(ImageInterface &img,
         
         *axis_to_sweep += axis_increment;
     } while(*axis_to_sweep != axis_target);
-
 }
 
 void Renderer::fill_triangle(ImageInterface &img,
@@ -123,4 +123,45 @@ void Renderer::fill_triangle(ImageInterface &img,
                int x2, int y2,
                int graylevel)
 {
+    //Assume: x0,y0 is the lowest point
+    Cursor c1;
+    c1.add_point(x0,y0);
+    c1.add_point(x1,y1);
+    c1.add_point(x2,y2);
+
+    Cursor c2;
+    c2.add_point(x0,y0);
+    c2.add_point(x2,y2);
+    c2.add_point(x1,y1);
+    
+    bool did_y_change;
+    int x,y;
+    c1.advance(&did_y_change, &x, &y);
+    c2.advance(&did_y_change, &x, &y);
+    Renderer rend;
+    
+    while(true)
+    {
+        printf("a c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
+        rend.draw_line(img, c1.x(), c1.y(), c2.x(), c2.y(), graylevel);
+        did_y_change = false;
+        while(!c1.done() && !did_y_change)
+        {
+            c1.advance(&did_y_change, &x, &y);
+            img.set_pixel(x,y,graylevel);
+        }
+        printf("b c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
+        did_y_change = false;
+        while(!c2.done() && !did_y_change)
+        {
+            c2.advance(&did_y_change, &x, &y);
+            img.set_pixel(x,y,graylevel);
+        }
+        printf("c c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
+
+        if(c2.done() || c1.done())
+            break;
+
+    }
+    
 }

@@ -4,6 +4,8 @@ SET(LIBREND_SRCS
     image_png.h
     rend.cpp
     rend.h
+    cursor.cpp
+    cursor.h
     model.cpp
     model.h )
 

@@ -24,6 +24,12 @@ void draw_sample_image(const char * filename)
     rend.draw_line(img, 999, 999, 999, 0,   255);
     rend.draw_line(img, 999, 0,   0,   0,   255);
 
+    rend.fill_triangle(img, 
+                        100, 100,
+                        50,  200,
+                        150, 240,
+                        255);
+
     img.write(filename);
 }
 
