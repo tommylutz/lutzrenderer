@@ -6,6 +6,7 @@ SET(LIBREND_SRCS
     rend.h
     cursor.cpp
     cursor.h
+    color.h
     model.cpp
     model.h )
 
