@@ -18,7 +18,7 @@ PngImage::PngImage(
     if(width <= 0 || height <= 0)
         throw std::invalid_argument("Invalid width/height provided");
 
-    m_image_data = new unsigned char[width*height];
+    m_image_data = new unsigned int[width*height];
     for(int i=0; i<width*height; ++i)
         m_image_data[i] = 0;
 }
@@ -33,12 +33,12 @@ int PngImage::num_pixels() const
     return m_width * m_height;
 }
 
-void PngImage::set_pixel(int x, int y, unsigned char graylevel)
+void PngImage::set_pixel(int x, int y, const Color& color)
 {
     if(x>=0 && x < m_width &&
        y>=0 && y < m_height)
     {
-        m_image_data[x+y*m_width] = graylevel;
+        m_image_data[x+y*m_width] = color;
     }
 }
 
@@ -86,14 +86,14 @@ bool PngImage::write(const std::string& strFilename)
                  m_width, 
                  m_height, 
                  8 /*bit_depth*/,
-                 PNG_COLOR_TYPE_GRAY,
+                 PNG_COLOR_TYPE_RGB_ALPHA,
                  PNG_INTERLACE_NONE,
                  PNG_COMPRESSION_TYPE_DEFAULT,
                  PNG_FILTER_TYPE_DEFAULT);
     
     image_rows = new png_byte*[m_height];
     for(int i=0; i<m_height; ++i)
-        image_rows[m_height-i-1] = &m_image_data[m_width*i];
+        image_rows[m_height-i-1] = reinterpret_cast<png_byte*>(&m_image_data[m_width*i]);
 
     i_libpng->png_set_rows(png_ptr, info_ptr, image_rows);
     i_libpng->png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);

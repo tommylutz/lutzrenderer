@@ -14,7 +14,7 @@ public:
              libpng_Interface * p_i_libpng,
              file_Interface * p_i_file);
     virtual ~PngImage();
-    virtual void set_pixel(int x, int y, unsigned char graylevel);
+    virtual void set_pixel(int x, int y, const Color& color);
     bool write(const std::string& strFilename);
 
     int num_pixels() const;
@@ -25,7 +25,7 @@ private:
     //External Interfaces
     libpng_Interface * i_libpng;
     file_Interface * i_file;
-    unsigned char * m_image_data;
+    unsigned int * m_image_data;
 };
 
 

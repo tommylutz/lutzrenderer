@@ -12,23 +12,23 @@ void draw_sample_image(const char * filename)
     
     for(int x=0; x<1000; x+=10)
     {
-        rend.draw_line(img, x, 0, 999, x, abs(255-x/2)); 
-        rend.draw_line(img, 0, x, x, 999, abs(255-x/2)); 
+        rend.draw_line(img, x, 0, 999, x, 0xFF0000FF); 
+        rend.draw_line(img, 0, x, x, 999, 0xFFFF00FF); 
     }
 
-    rend.draw_line(img, 0,   0,  999, 999, 255);
-    rend.draw_line(img, 999, 0,  0,   999, 255);
+    rend.draw_line(img, 0,   0,  999, 999, 0xFF00FFFF);
+    rend.draw_line(img, 999, 0,  0,   999, 0xFFFFFFFF);
 
-    rend.draw_line(img, 0,   0,   0,   999, 255);
-    rend.draw_line(img, 0,   999, 999, 999, 255);
-    rend.draw_line(img, 999, 999, 999, 0,   255);
-    rend.draw_line(img, 999, 0,   0,   0,   255);
+    rend.draw_line(img, 0,   0,   0,   999, 0xFF0000FF);
+    rend.draw_line(img, 0,   999, 999, 999, 0xFF0000FF);
+    rend.draw_line(img, 999, 999, 999, 0,   0xFF0000FF);
+    rend.draw_line(img, 999, 0,   0,   0,   0xFF0000FF);
 
     rend.fill_triangle(img, 
                         100, 100,
                         50,  200,
                         150, 240,
-                        255);
+                        0xFF00FF00);
 
     img.write(filename);
 }
@@ -84,7 +84,7 @@ int main(int argc, char ** argv)
             Vertex v1 = model.vertex_at(face.id1()).translate(xoff,yoff,zoff,scale);
             Vertex v2 = model.vertex_at(face.id2()).translate(xoff,yoff,zoff,scale);
             Vertex v3 = model.vertex_at(face.id3()).translate(xoff,yoff,zoff,scale);
-            rend.draw_triangle(img, v1, v2, v3, 255);
+            rend.draw_triangle(img, v1, v2, v3, 0xFF0000FF);
         }
 
         if(img.write("./foo.png"))

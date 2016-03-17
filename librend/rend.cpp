@@ -17,18 +17,18 @@ Renderer::~Renderer()
 void Renderer::draw_line(ImageInterface& img,
                    double x0, double y0, 
                    double x1, double y1,
-                   int graylevel)
+                   const Color& color)
 {
     draw_line(  img,
                 static_cast<int>(round(x0)), static_cast<int>(round(y0)),
                 static_cast<int>(round(x1)), static_cast<int>(round(y1)),
-                graylevel );
+                color );
 }
 
 void Renderer::draw_line(ImageInterface& img,
                     int x0, int y0,
                     int x1, int y1,
-                    int graylevel)
+                    const Color& color)
 {
     const int dx = abs(x1 - x0);
     const int dy = abs(y1 - y0);
@@ -43,7 +43,7 @@ void Renderer::draw_line(ImageInterface& img,
         int y = y0;
         for(int x=x0; x != (x1+x_sign); x += x_sign)
         {
-            img.set_pixel(x,y,graylevel);
+            img.set_pixel(x,y,color);
             error += dy2;
             if(error >= dx)
             {
@@ -57,7 +57,7 @@ void Renderer::draw_line(ImageInterface& img,
         int x = x0;
         for(int y=y0; y != (y1+y_sign); y += y_sign)
         {
-            img.set_pixel(x,y,graylevel);
+            img.set_pixel(x,y,color);
             error += dx2;
             if(error >= dy)
             {
@@ -72,7 +72,7 @@ void Renderer::fill_triangle(ImageInterface &img,
                int x0, int y0, 
                int x1, int y1,
                int x2, int y2,
-               int graylevel)
+               const Color& color)
 {
     //Assume: x0,y0 is the lowest point
     Cursor c1;
@@ -94,19 +94,19 @@ void Renderer::fill_triangle(ImageInterface &img,
     while(true)
     {
         printf("a c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
-        rend.draw_line(img, c1.x(), c1.y(), c2.x(), c2.y(), graylevel);
+        rend.draw_line(img, c1.x(), c1.y(), c2.x(), c2.y(), color);
         did_y_change = false;
         while(!c1.done() && !did_y_change)
         {
             c1.advance(&did_y_change, &x, &y);
-            img.set_pixel(x,y,graylevel);
+            img.set_pixel(x,y,color);
         }
         printf("b c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
         did_y_change = false;
         while(!c2.done() && !did_y_change)
         {
             c2.advance(&did_y_change, &x, &y);
-            img.set_pixel(x,y,graylevel);
+            img.set_pixel(x,y,color);
         }
         printf("c c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
 
