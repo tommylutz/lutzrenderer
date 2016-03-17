@@ -30,42 +30,14 @@ void Renderer::draw_line(ImageInterface& img,
                     int x1, int y1,
                     const Color& color)
 {
-    const int dx = abs(x1 - x0);
-    const int dy = abs(y1 - y0);
-    const int dx2 = dx << 1;
-    const int dy2 = dy << 1;
-    const int y_sign = (y1>=y0)?1:-1;
-    const int x_sign = (x1>=x0)?1:-1;
-    int error = 0;
-
-    if(dx > dy)
-    {   
-        int y = y0;
-        for(int x=x0; x != (x1+x_sign); x += x_sign)
-        {
-            img.set_pixel(x,y,color);
-            error += dy2;
-            if(error >= dx)
-            {
-                y += y_sign;
-                error -= dx2;
-            }
-        }
-    }
-    else
+    Cursor cursor;
+    cursor.add_point(x0,y0);
+    cursor.add_point(x1,y1);
+    while(cursor.advance())
     {
-        int x = x0;
-        for(int y=y0; y != (y1+y_sign); y += y_sign)
-        {
-            img.set_pixel(x,y,color);
-            error += dx2;
-            if(error >= dy)
-            {
-                x += x_sign;
-                error -= dy2;
-            }
-        }
+        img.set_pixel(cursor.x(),cursor.y(),color);
     }
+    return;
 }
 
 void Renderer::fill_triangle(ImageInterface &img,
@@ -75,6 +47,7 @@ void Renderer::fill_triangle(ImageInterface &img,
                const Color& color)
 {
     //Assume: x0,y0 is the lowest point
+    //
     Cursor c1;
     c1.add_point(x0,y0);
     c1.add_point(x1,y1);
@@ -87,32 +60,41 @@ void Renderer::fill_triangle(ImageInterface &img,
     
     bool did_y_change;
     int x,y;
-    c1.advance(&did_y_change, &x, &y);
-    c2.advance(&did_y_change, &x, &y);
     Renderer rend;
-    
+    printf("Filling triangle with points (%d,%d), (%d,%d), (%d,%d)\n",
+           x0,y0,
+           x1,y1,
+           x2,y1);
+
+    c1.advance();
+    c2.advance();
+
+    //TODO: Loop terminating condition can be optimized further
+    // Cursors can go speeding past each other right now
     while(true)
     {
-        printf("a c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
         rend.draw_line(img, c1.x(), c1.y(), c2.x(), c2.y(), color);
-        did_y_change = false;
-        while(!c1.done() && !did_y_change)
-        {
-            c1.advance(&did_y_change, &x, &y);
-            img.set_pixel(x,y,color);
-        }
-        printf("b c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
-        did_y_change = false;
-        while(!c2.done() && !did_y_change)
-        {
-            c2.advance(&did_y_change, &x, &y);
-            img.set_pixel(x,y,color);
-        }
-        printf("c c1: %3d,%3d c2: %3d,%3d\n",c1.x(),c1.y(), c2.x(), c2.y());
-
-        if(c2.done() || c1.done())
+        
+        int old_y = c1.y();
+        while(c1.advance() && c1.y() == old_y)
+            img.set_pixel(c1.x(),c1.y(),color);
+        if(c1.y() < old_y)
+            break;
+        
+        if(c1 == c2)
             break;
 
+        old_y = c2.y();
+        while(c2.advance() && c2.y() == old_y)
+            img.set_pixel(c2.x(),c2.y(),color);
+        if(c2.y() < old_y)
+            break;
+
+        if(c1 == c2)
+            break;
+
+        if(c1.done() || c2.done()) 
+            break;
     }
     
 }

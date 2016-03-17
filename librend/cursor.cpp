@@ -26,97 +26,89 @@ void Cursor::add_point(int x, int y)
 
 bool Cursor::initialize()
 {
-    if(m_next == m_points.end())
-        return false;
-
-    const int x0 = m_first->first;
-    const int y0 = m_first->second;
-
-    const int x1 = m_next->first;
-    const int y1 = m_next->second;
-
-    m_dx = x1 - x0;
-    m_dy = y1 - y0;
-    m_x = x0;
-    m_y = y0;
-
-    if(abs(m_dx) > abs(m_dy))
-    {
-        m_axis_to_sweep = &m_x;
-        m_axis_increment = (m_dx<0)?-1:1;
-        m_axis_target = x1 + m_axis_increment;
-
-        m_error = abs(m_dy) << 1;
-        m_error_threshold = abs(m_dx);
-        m_error_axis = &m_y;
-        m_error_increment = (m_dy<0)?-1:1;
-    }
-    else
-    {
-        m_axis_to_sweep = &m_y;
-        m_axis_increment = (m_dy<0)?-1:1;
-        m_axis_target = y1 + m_axis_increment;
-
-        m_error = abs(m_dx) << 1;
-        m_error_threshold = abs(m_dy);
-        m_error_axis = &m_x;
-        m_error_increment = (m_dx<0)?-1:1;
-    }
     return true;
 }
 
-bool Cursor::advance(bool * did_y_change, int *x_out, int *y_out)
+void Cursor::setup_line_drawing_params()
 {
-    *did_y_change = false;
-
-    if(!m_bstarted)
-    {
-        m_bstarted = true;
-        m_first = m_points.begin();
-        m_next = m_first;
-        if(m_next == m_points.end())
-            return false;
-        m_next++;
-
-        initialize();
-        *x_out = m_x;
-        *y_out = m_y;
-        *did_y_change = true;
-        return true;
-    }
-
-    const int old_y = m_y;
-
-    m_error_accumulator += m_error;
-    if(m_error_threshold &&  //protect against horizontal/vertical line
-            m_error_accumulator >= m_error_threshold)
-    {
-        *m_error_axis += m_error_increment;
-        while(m_error_accumulator >= 0)
-            m_error_accumulator -= m_error_threshold;
-    }
-
-    *m_axis_to_sweep += m_axis_increment;
-
-    *x_out = m_x;
-    *y_out = m_y;
-    *did_y_change = (old_y!=m_y);
-
-    if(m_x == m_next->first &&
-       m_y == m_next->second)
-    {
-        //Time to advance to next point
-        m_next++;
-        m_first++;
-        if(!initialize())
-            return false;
-    }
-    return true;
+    //m_start and m_end are valid iterators, not pointing to the end of the list
+    m_x = m_start->first;
+    m_y = m_start->second;
+    m_x1 = m_end->first;
+    m_y1 = m_end->second;
+    m_error = 0;
+    m_dx = abs(m_x1 - m_x);
+    m_dy = abs(m_y1 - m_y);
+    m_dx2 = m_dx*2;
+    m_dy2 = m_dy*2;
+    m_x_sign = (m_x1 >= m_x) ? 1 : -1;
+    m_y_sign = (m_y1 >= m_y) ? 1 : -1;
 }
 
 bool Cursor::done() const
 {
-    return m_next == m_points.end();
+    return m_end == m_points.end();
+}
+
+bool Cursor::advance()
+{
+    if(!m_bstarted)
+    {
+        m_bstarted = true;
+        if(m_points.empty())
+            return false;
+        
+        m_start = m_points.begin();
+        m_end = m_start;
+        ++m_end;
+
+        if(m_end == m_points.end())
+        {
+            m_x = m_start->first;
+            m_y = m_start->second;
+            return true;
+        }
+
+        //m_start and m_end are set up
+        setup_line_drawing_params();
+        return true;
+    }
+
+    if(m_end == m_points.end())
+        return false;
+
+    while(m_y == m_y1 && m_x == m_x1)
+    {
+        ++m_start;
+        ++m_end;
+        if(m_end != m_points.end())
+            setup_line_drawing_params();
+        else
+            return false; //No more lines to draw
+    }
+    
+    if(m_dx > m_dy)
+    {
+        m_x += m_x_sign;
+        m_error += m_dy2;
+        if(m_error >= m_dx)
+        {
+            m_y += m_y_sign;
+            m_error -= m_dx2;
+        }
+    }
+    else
+    {
+        m_y += m_y_sign;
+        m_error += m_dx2;
+        if(m_error >= m_dy)
+        {
+            m_x += m_x_sign;
+            m_error -= m_dy2;
+        }
+    }
+
+    return true;
 }
 
 bool operator == (const Cursor & c1, const Cursor & c2)

@@ -84,7 +84,12 @@ int main(int argc, char ** argv)
             Vertex v1 = model.vertex_at(face.id1()).translate(xoff,yoff,zoff,scale);
             Vertex v2 = model.vertex_at(face.id2()).translate(xoff,yoff,zoff,scale);
             Vertex v3 = model.vertex_at(face.id3()).translate(xoff,yoff,zoff,scale);
-            rend.draw_triangle(img, v1, v2, v3, 0xFF0000FF);
+            
+            printf("Rendering face %d\n",facenum);
+            rend.fill_triangle(img, v1, v2, v3, (0xFF << 24)        | 
+                                                (rand()%256 << 16)  | 
+                                                (rand()%256 << 8)   |
+                                                rand()%256 );
         }
 
         if(img.write("./foo.png"))

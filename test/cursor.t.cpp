@@ -2,21 +2,62 @@
 #include <gtest/gtest.h>
 #include <cursor.h>
 
-TEST(Cursor, CursorTest)
+TEST(Cursor, EmptyCursor)
+{
+    Cursor cursor;
+    EXPECT_FALSE(cursor.advance());
+}
+
+TEST(Cursor, PointCursor)
+{
+    Cursor cursor;
+    cursor.add_point(1,5);
+    EXPECT_TRUE(cursor.advance());
+    EXPECT_EQ(1,cursor.x());
+    EXPECT_EQ(5,cursor.y());
+    EXPECT_FALSE(cursor.advance());
+}
+
+TEST(Cursor, ShortLine)
 {
     Cursor cursor;
     cursor.add_point(0,0);
-    cursor.add_point(3,0);
-    cursor.add_point(0,3);
-    
-    int x, y;
-    bool did_y_change;
-    
-    while(!cursor.done())
-    {
-        cursor.advance(&did_y_change, &x, &y);
-        printf("Point: %d,%d, y changed? %c\n",x,y,did_y_change?'Y':'N');
-    }
-    EXPECT_EQ(1,1);
-    
+    cursor.add_point(1,0);
+    EXPECT_TRUE(cursor.advance());
+    EXPECT_EQ(0,cursor.x()); EXPECT_EQ(0,cursor.y());
+    EXPECT_TRUE(cursor.advance());
+    EXPECT_EQ(1,cursor.x()); EXPECT_EQ(0,cursor.y());
+    EXPECT_FALSE(cursor.advance());
+    EXPECT_EQ(1,cursor.x()); EXPECT_EQ(0,cursor.y());
+}
+
+TEST(Cursor, NoLine)
+{
+    Cursor cursor;
+    cursor.add_point(0,0);
+    cursor.add_point(0,0);
+    cursor.add_point(0,0);
+    cursor.add_point(0,0);
+    cursor.add_point(0,0);
+    EXPECT_TRUE(cursor.advance());
+    EXPECT_EQ(0,cursor.x()); EXPECT_EQ(0,cursor.y());
+    EXPECT_FALSE(cursor.advance());
+}
+
+TEST(Cursor, PingPong)
+{
+    Cursor cursor;
+    cursor.add_point(0,0);
+    cursor.add_point(1,0);
+    cursor.add_point(1,0);
+    cursor.add_point(0,0);
+    cursor.add_point(0,0);
+    EXPECT_TRUE(cursor.advance());
+    EXPECT_EQ(0,cursor.x()); EXPECT_EQ(0,cursor.y());
+    EXPECT_TRUE(cursor.advance());
+    EXPECT_EQ(1,cursor.x()); EXPECT_EQ(0,cursor.y());
+    EXPECT_TRUE(cursor.advance());
+    EXPECT_EQ(0,cursor.x()); EXPECT_EQ(0,cursor.y());
+    EXPECT_FALSE(cursor.advance());
+    EXPECT_EQ(0,cursor.x()); EXPECT_EQ(0,cursor.y());
 }

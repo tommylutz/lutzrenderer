@@ -9,28 +9,25 @@ class Cursor
 public:
     Cursor();
     void add_point(int x, int y);
-    bool advance(bool * did_y_change, int *x_out, int *y_out);
+    bool advance();
     int x() const;
     int y() const;
     bool done() const;
 private:
     bool initialize();
+    void setup_line_drawing_params();
 
     std::list<std::pair<int,int> > m_points;
-    std::list<std::pair<int,int> >::const_iterator m_first;
-    std::list<std::pair<int,int> >::const_iterator m_next;
+    std::list<std::pair<int,int> >::const_iterator m_start;
+    std::list<std::pair<int,int> >::const_iterator m_end;
+
     bool m_bstarted;
     int m_x, m_y;
-
     int m_dx, m_dy;
-    int * m_axis_to_sweep;
-    int m_axis_increment;
-    int m_axis_target;
+    int m_dx2, m_dy2;
+    int m_x_sign, m_y_sign;
     int m_error;
-    int m_error_accumulator;
-    int *m_error_axis;
-    int m_error_increment;
-    int m_error_threshold;
+    int m_x1, m_y1;
 };
 
 bool operator == (const Cursor & c1, const Cursor & c2);
