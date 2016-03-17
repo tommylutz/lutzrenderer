@@ -210,10 +210,10 @@ TEST(PolyTracer, DrawLineOrdered)
         EXPECT_CALL(img, set_pixel(1,4,255)).Times(1);
         EXPECT_CALL(img, set_pixel(1,5,255)).Times(1);
     }
-    rend.draw_line_ordered( img,
-                            0, 0,
-                            1, 5,
-                            255 );
+    rend.draw_line( img,
+                    0, 0,
+                    1, 5,
+                    255 );
 }
 
 TEST(PolyTracer, DrawLineOrdered_Long)
@@ -235,8 +235,8 @@ TEST(PolyTracer, DrawLineOrdered_Long)
         EXPECT_CALL(img, set_pixel(10,5,255)).Times(1);
         EXPECT_CALL(img, set_pixel(11,5,255)).Times(1);
     }
-    rend.draw_line_ordered( img,
-                            1,  1,
-                            11, 5,
-                            255 );
+    rend.draw_line( img,
+                    1,  1,
+                    11, 5,
+                    255 );
 }
