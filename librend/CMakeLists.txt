@@ -8,6 +8,7 @@ SET(LIBREND_SRCS
     cursor.h
     color.h
     model.cpp
+    vec3.h
     model.h )
 
 ADD_LIBRARY(librend STATIC

@@ -4,6 +4,7 @@ image_png.t.cpp
 rend.t.cpp
 model.t.cpp
 cursor.t.cpp
+vec3.t.cpp
 )
 
 TARGET_LINK_LIBRARIES(rendtest.t.tsk
