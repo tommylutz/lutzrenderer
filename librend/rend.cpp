@@ -45,9 +45,33 @@ void Renderer::fill_triangle(ImageInterface &img,
                int x1, int y1,
                int x2, int y2,
                const Color& color)
-{
-    //Assume: x0,y0 is the lowest point
-    //
+{   
+    if(y0 <= y1 && y0 <= y2)
+    {
+        //Good to go!
+    }
+    else if(y1 <= y0 && y1 <= y2)
+    {
+        //y1 is the minimum
+        fill_triangle(img,
+                      x1,y1,
+                      x0,y0,
+                      x2,y2,
+                      color);
+        return;
+    }
+    else
+    {
+        //y2 is the minimum
+        fill_triangle(img,
+                      x2,y2,
+                      x0,y0,
+                      x1,y1,
+                      color);
+        return;
+    }
+
+    //At this point, y0 is the lowest point
     Cursor c1;
     c1.add_point(x0,y0);
     c1.add_point(x1,y1);
@@ -58,13 +82,7 @@ void Renderer::fill_triangle(ImageInterface &img,
     c2.add_point(x2,y2);
     c2.add_point(x1,y1);
     
-    bool did_y_change;
-    int x,y;
     Renderer rend;
-    printf("Filling triangle with points (%d,%d), (%d,%d), (%d,%d)\n",
-           x0,y0,
-           x1,y1,
-           x2,y1);
 
     c1.advance();
     c2.advance();
@@ -91,7 +109,10 @@ void Renderer::fill_triangle(ImageInterface &img,
             break;
 
         if(c1 == c2)
+        {
+            img.set_pixel(c2.x(),c2.y(),color);
             break;
+        }
 
         if(c1.done() || c2.done()) 
             break;

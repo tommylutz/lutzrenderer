@@ -30,30 +30,11 @@ public:
                        const T& p3,
                        const Color& color)
     {
-        if(p1.y() <= p2.y() && p1.y() <= p3.y())
-        {
-            fill_triangle(  img, 
-                            p1.x(), p1.y(),
-                            p2.x(), p2.y(),
-                            p3.x(), p3.y(),
-                            color);
-        }
-        else if(p2.y() <= p1.y() && p2.y() <= p3.y())
-        {
-            fill_triangle(  img, 
-                            p2.x(), p2.y(),
-                            p1.x(), p1.y(),
-                            p3.x(), p3.y(),
-                            color);
-        }
-        else
-        {
-            fill_triangle(  img, 
-                            p3.x(), p3.y(),
-                            p1.x(), p1.y(),
-                            p2.x(), p2.y(),
-                            color);
-        }
+        fill_triangle(img,
+                     p1.x(),p1.y(),
+                     p2.x(),p2.y(),
+                     p3.x(),p3.y(),
+                     color);
     }
 
 

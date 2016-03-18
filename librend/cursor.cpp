@@ -31,7 +31,7 @@ bool Cursor::initialize()
 
 void Cursor::setup_line_drawing_params()
 {
-    //m_start and m_end are valid iterators, not pointing to the end of the list
+    //Requires: m_start and m_end are valid iterators, not pointing to the end of the list
     m_x = m_start->first;
     m_y = m_start->second;
     m_x1 = m_end->first;
@@ -61,7 +61,8 @@ bool Cursor::advance()
         m_start = m_points.begin();
         m_end = m_start;
         ++m_end;
-
+    
+        //Take care of case where only 1 point was added
         if(m_end == m_points.end())
         {
             m_x = m_start->first;
@@ -69,7 +70,6 @@ bool Cursor::advance()
             return true;
         }
 
-        //m_start and m_end are set up
         setup_line_drawing_params();
         return true;
     }
