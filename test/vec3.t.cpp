@@ -93,3 +93,11 @@ TEST(Vec3f, Divide)
     EXPECT_DOUBLE_EQ(-25,  quotient.j());
     EXPECT_DOUBLE_EQ(100.5,quotient.k());
 }
+
+TEST(Vec3f, DotProduct)
+{
+    Vec3f multiplicand(4,-1,2);
+    Vec3f multiplier(1,2,3);
+    double product = multiplicand * multiplier;
+    EXPECT_DOUBLE_EQ(8, product);
+}

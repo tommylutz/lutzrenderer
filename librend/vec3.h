@@ -39,10 +39,20 @@ public:
                         m_k * b.m_i - m_i * b.m_k,
                         m_i * b.m_j - m_j * b.m_i );
     }
-
     Vec3 operator^(const Vec3& b) const
     {
         return cross_product(b);
+    }
+
+    T dot_product(const Vec3& b) const
+    {
+        return  m_i * b.m_i +
+                m_j * b.m_j +
+                m_k * b.m_k;
+    }
+    T operator*(const Vec3& b) const
+    {
+        return dot_product(b);
     }
 
     double magnitude() const
