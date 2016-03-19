@@ -5,6 +5,7 @@
 using ::testing::AtLeast;
 using ::testing::InSequence;
 using ::testing::NiceMock;
+using ::testing::_;
 
 TEST(NoopTest, NoopTest)
 {
@@ -284,6 +285,18 @@ TEST(RendererFillTest, FillTriangle3Pixels)
                        -1,5,
                        0,5,
                        -1,6,
+                       255);
+}
+
+TEST(RendererFillTest, FillTriangleWhereNextPixelIsSameForBothCursors)
+{
+    MockImage img;
+    EXPECT_CALL(img, set_pixel(_,_,_)).Times(AtLeast(150));
+    Renderer rend;
+    rend.fill_triangle(img,
+                       1,0,
+                       0,100,
+                       2,100,
                        255);
 }
 

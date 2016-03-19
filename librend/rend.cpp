@@ -99,20 +99,11 @@ void Renderer::fill_triangle(ImageInterface &img,
         if(c1.y() < old_y)
             break;
         
-        if(c1 == c2)
-            break;
-
         old_y = c2.y();
         while(c2.advance() && c2.y() == old_y)
             img.set_pixel(c2.x(),c2.y(),color);
         if(c2.y() < old_y)
             break;
-
-        if(c1 == c2)
-        {
-            img.set_pixel(c2.x(),c2.y(),color);
-            break;
-        }
 
         if(c1.done() || c2.done()) 
             break;
