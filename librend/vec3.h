@@ -8,6 +8,13 @@ template<typename T>
 class Vec3
 {
 public:
+    Vec3() :
+        m_i(0),
+        m_j(0),
+        m_k(0)
+    {
+    }
+
     Vec3(const T& i, const T& j, const T& k) :
         m_i(i),
         m_j(j),
@@ -18,6 +25,9 @@ public:
     inline T i() const { return m_i; }
     inline T j() const { return m_j; }
     inline T k() const { return m_k; }
+    inline T x() const { return m_i; }
+    inline T y() const { return m_j; }
+    inline T z() const { return m_k; }
 
     Vec3 operator+(const Vec3& other) const
     {
@@ -79,6 +89,22 @@ private:
     T m_i, m_j, m_k;
 };
 
+template <typename T>
+bool operator==(const Vec3<T>& vec1,
+                const Vec3<T>& vec2)
+{
+    return vec1.i() == vec2.i() &&
+           vec1.j() == vec2.j() &&
+           vec1.k() == vec2.k();
+}
+
+template <typename T>
+Vec3<T> operator*(const Vec3<T>& vec, double d)
+{
+    return Vec3<T>(vec.i()*d,
+                   vec.j()*d,
+                   vec.k()*d);
+}
 
 typedef Vec3<double> Vec3f;
 

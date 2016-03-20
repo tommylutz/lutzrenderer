@@ -5,51 +5,6 @@
 
 //===================================================
 
-Vertex::Vertex() :
-    m_x(0), m_y(0), m_z(0)
-{
-}
-
-Vertex::Vertex(double x, double y, double z) :
-    m_x(x), m_y(y), m_z(z)
-{
-}
-
-Vertex::Vertex(const Vertex& other)
-{
-    Vertex::operator=(other);
-}
-
-Vertex& Vertex::operator = (const Vertex& other)
-{
-    if(this != &other)
-    {
-        m_x = other.m_x;
-        m_y = other.m_y;
-        m_z = other.m_z;
-    }
-    return *this;
-}
-
-bool operator == (const Vertex& a, const Vertex &b)
-{
-    return  a.x() == b.x() &&
-            a.y() == b.y() &&
-            a.z() == b.z();
-}
-
-Vertex Vertex::translate(double xoff, 
-                         double yoff, 
-                         double zoff, 
-                         double scale) const
-{
-    return Vertex(  (m_x+xoff)*scale,
-                    (m_y+yoff)*scale,
-                    (m_z+zoff)*scale );
-}
-
-//===================================================
-
 Face::Face(const Face& other)
 {
     Face::operator=(other);
@@ -83,7 +38,7 @@ Model::~Model()
 {
 }
 
-const Vertex& Model::vertex_at(int idx) const
+const Vec3f& Model::vertex_at(int idx) const
 {
     if(idx-1 >= m_vertexes.size() || idx == 0)
     {

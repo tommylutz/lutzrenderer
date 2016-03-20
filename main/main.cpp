@@ -77,13 +77,15 @@ int main(int argc, char ** argv)
         Renderer rend;
 
         const int num_faces = model.num_faces();
+        Vec3f vecoffset(xoff,yoff,zoff);
+
         for(int facenum=0; facenum<num_faces; ++facenum)
         {
             //TODO: This assumes each face has only 3 vertexes.
             const Face& face = model.face_at(facenum);
-            Vertex v1 = model.vertex_at(face.id1()).translate(xoff,yoff,zoff,scale);
-            Vertex v2 = model.vertex_at(face.id2()).translate(xoff,yoff,zoff,scale);
-            Vertex v3 = model.vertex_at(face.id3()).translate(xoff,yoff,zoff,scale);
+            Vec3f v1 = (model.vertex_at(face.id1())+vecoffset)*scale;
+            Vec3f v2 = (model.vertex_at(face.id2())+vecoffset)*scale;
+            Vec3f v3 = (model.vertex_at(face.id3())+vecoffset)*scale;
             
             printf("Rendering face %d\n",facenum);
             rend.fill_triangle(img, v1, v2, v3, (0xFF << 24)        | 

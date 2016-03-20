@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include <mock_file_interface.h>
 #include <model.h>
+#include <vec3.h>
 
 using ::testing::_;
 using ::testing::StrEq;
@@ -10,7 +11,8 @@ using ::testing::Invoke;
 using ::testing::Return;
 using ::testing::DoAll;
 
-void Expect_Fopen_Fgets_Fclose(const char * const * lines, Mockfile_Interface& i_file)
+void Expect_Fopen_Fgets_Fclose(const char * const * lines, 
+                               Mockfile_Interface& i_file)
 {
     static char buf[1];
     EXPECT_CALL(i_file, fopen(_,StrEq("rb"))).Times(1);
@@ -63,9 +65,9 @@ TEST(Model, ModelLoadsVertexes)
 
     EXPECT_TRUE(model.load_from_file("dummy.obj",i_file));
     ASSERT_EQ(3, model.num_vertexes());
-    EXPECT_EQ(Vertex(1.234,2.512,-3.6381), model.vertex_at(1));
-    EXPECT_EQ(Vertex(2,    3,     4     ), model.vertex_at(2));
-    EXPECT_EQ(Vertex(5,    6,     7     ), model.vertex_at(3));
+    EXPECT_EQ(Vec3f(1.234,2.512,-3.6381), model.vertex_at(1));
+    EXPECT_EQ(Vec3f(2,    3,     4     ), model.vertex_at(2));
+    EXPECT_EQ(Vec3f(5,    6,     7     ), model.vertex_at(3));
 }
 
 TEST(Model, ModelLoadsFaces)
