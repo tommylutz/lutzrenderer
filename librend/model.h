@@ -27,7 +27,7 @@ public:
     bool load_from_file(const char * szFileName,
                         file_Interface & i_file);
     const Vec3f& vertex_at(int idx) const;
-    inline const Face& face_at(int idx) { return m_faces[idx]; }
+    inline const Face& face_at(int idx) const { return m_faces[idx]; }
     inline int num_vertexes() const { return m_vertexes.size(); }
     inline int num_faces() const { return m_faces.size(); }
     inline const std::pair<double, double>& xrange() const { return m_xrange; }

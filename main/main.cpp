@@ -53,47 +53,10 @@ int main(int argc, char ** argv)
             printf("Failed to load model\n");
             return 1;
         }
-        printf("Total vertexes: %d\nTotal faces: %d\n",
-                model.num_vertexes(), 
-                model.num_faces());
-        printf("Ranges:\n");
-        printf(" x (%f to %f)\n", model.xrange().first, model.xrange().second);
-        printf(" y (%f to %f)\n", model.yrange().first, model.yrange().second);
-        printf(" z (%f to %f)\n", model.zrange().first, model.zrange().second);
-
-        double xoff = -1.*model.xrange().first;
-        double yoff = -1.*model.yrange().first;
-        double zoff = -1.*model.zrange().first;
-
         PngImage img(1000,1000, &i_libpng, &i_file);
-        
-        double scale = (std::min(img.width(), img.height())-1.) / 
-                       std::max(model.xrange().second - model.xrange().first,
-                                model.yrange().second - model.yrange().first );
-
-        printf("Offsets:\n x=%f\n y=%f\n z=%f\n scale=%f\n",
-                xoff, yoff, zoff, scale);
-    
         Renderer rend;
-
-        const int num_faces = model.num_faces();
-        Vec3f vecoffset(xoff,yoff,zoff);
-
-        for(int facenum=0; facenum<num_faces; ++facenum)
-        {
-            //TODO: This assumes each face has only 3 vertexes.
-            const Face& face = model.face_at(facenum);
-            Vec3f v1 = (model.vertex_at(face.id1())+vecoffset)*scale;
-            Vec3f v2 = (model.vertex_at(face.id2())+vecoffset)*scale;
-            Vec3f v3 = (model.vertex_at(face.id3())+vecoffset)*scale;
-            
-            printf("Rendering face %d\n",facenum);
-            rend.fill_triangle(img, v1, v2, v3, (0xFF << 24)        | 
-                                                (rand()%256 << 16)  | 
-                                                (rand()%256 << 8)   |
-                                                rand()%256 );
-        }
-
+        rend.render_random_color_model(img, model);
+        rend.render_wireframe_model(img, model);
         if(img.write("./foo.png"))
         {
             printf("Wrote an x-y plot of your model to ./foo.png!\n");

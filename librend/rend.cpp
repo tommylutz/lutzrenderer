@@ -108,5 +108,72 @@ void Renderer::fill_triangle(ImageInterface &img,
         if(c1.done() || c2.done()) 
             break;
     }
-    
 }
+
+
+void Renderer::render_wireframe_model(ImageInterface & img,
+                                      const Model & model)
+{
+    Vec3f offset(-1*model.xrange().first,
+                 -1*model.yrange().first,
+                 0);
+    double scale = (std::min(img.width(), img.height())-1.) / 
+                   std::max(model.xrange().second - model.xrange().first,
+                            model.yrange().second - model.yrange().first );
+    
+    const int num_faces = model.num_faces();
+
+    for(int facenum = 0; facenum < num_faces; ++facenum)
+    {
+        const Face& face = model.face_at(facenum);
+        Vec3f v1 = model.vertex_at(face.id1());
+        Vec3f v2 = model.vertex_at(face.id2());
+        Vec3f v3 = model.vertex_at(face.id3());
+        
+        draw_triangle(img,
+                      (v1+offset)*scale,
+                      (v2+offset)*scale,
+                      (v3+offset)*scale,
+                      0xffffffff);
+    }
+}
+
+void Renderer::render_random_color_model(ImageInterface & img,
+                                         const Model & model)
+{
+    Vec3f offset(-1*model.xrange().first,
+                 -1*model.yrange().first,
+                 0);
+    double scale = (std::min(img.width(), img.height())-1.) / 
+                   std::max(model.xrange().second - model.xrange().first,
+                            model.yrange().second - model.yrange().first );
+    const int num_faces = model.num_faces();
+
+    for(int facenum = 0; facenum < num_faces; ++facenum)
+    {
+        const Face& face = model.face_at(facenum);
+        Vec3f v1 = model.vertex_at(face.id1());
+        Vec3f v2 = model.vertex_at(face.id2());
+        Vec3f v3 = model.vertex_at(face.id3());
+
+        fill_triangle(img,
+                      (v1+offset)*scale,
+                      (v2+offset)*scale,
+                      (v3+offset)*scale,
+                        (0xFF << 24)        | 
+                        (rand()%256 << 16)  | 
+                        (rand()%256 << 8)   |
+                        rand()%256 );
+    }
+}
+
+
+void Renderer::render_flat_shaded_model(ImageInterface & img,
+                                        const Model & model,
+                                        const Vec3f& light_dir)
+{
+}
+
+
+
+

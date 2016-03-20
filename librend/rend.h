@@ -2,6 +2,8 @@
 #define _REND_H_
 #include "image_interface.h"
 #include <algorithm>
+#include "model.h"
+#include "vec3.h"
 
 class Renderer
 {
@@ -49,6 +51,16 @@ public:
         draw_line(img, p2.x(), p2.y(), p3.x(), p3.y(), color);
         draw_line(img, p3.x(), p3.y(), p1.x(), p1.y(), color);
     }
+
+    void render_wireframe_model(ImageInterface & img,
+                                const Model & model);
+
+    void render_random_color_model(ImageInterface & img,
+                                   const Model & model);
+
+    void render_flat_shaded_model(ImageInterface & img,
+                                  const Model & model,
+                                  const Vec3f& light_dir);
 };
 
 
