@@ -55,8 +55,9 @@ int main(int argc, char ** argv)
         }
         PngImage img(1000,1000, &i_libpng, &i_file);
         Renderer rend;
-        rend.render_random_color_model(img, model);
-        rend.render_wireframe_model(img, model);
+        //rend.render_random_color_model(img, model);
+        //rend.render_wireframe_model(img, model);
+        rend.render_flat_shaded_model(img, model, Vec3f(0,0,1));
         if(img.write("./foo.png"))
         {
             printf("Wrote an x-y plot of your model to ./foo.png!\n");

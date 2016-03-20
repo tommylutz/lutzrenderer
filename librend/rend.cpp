@@ -172,6 +172,40 @@ void Renderer::render_flat_shaded_model(ImageInterface & img,
                                         const Model & model,
                                         const Vec3f& light_dir)
 {
+    Vec3f offset(-1*model.xrange().first,
+                 -1*model.yrange().first,
+                 0);
+    double scale = (std::min(img.width(), img.height())-1.) / 
+                   std::max(model.xrange().second - model.xrange().first,
+                            model.yrange().second - model.yrange().first );
+    const int num_faces = model.num_faces();
+
+    for(int facenum = 0; facenum < num_faces; ++facenum)
+    {
+        const Face& face = model.face_at(facenum);
+        Vec3f v1 = model.vertex_at(face.id1());
+        Vec3f v2 = model.vertex_at(face.id2());
+        Vec3f v3 = model.vertex_at(face.id3());
+
+        Vec3f normal = ((v2-v1)^(v3-v1)).normalize();
+        double intensity = light_dir*normal;
+
+        if(intensity > 0)
+        {
+            unsigned int graylevel = intensity*255;
+            unsigned int color = 
+                            graylevel      |
+                            graylevel<<8   |
+                            graylevel<< 16 |
+                            0xFF000000;
+
+            fill_triangle(img,
+                          (v1+offset)*scale,
+                          (v2+offset)*scale,
+                          (v3+offset)*scale,
+                          color );
+        }
+    }
 }
 
 
