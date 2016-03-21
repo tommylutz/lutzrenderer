@@ -114,5 +114,16 @@ bool Model::load_from_file(const char * szFileName,
             load_face(&buf[2]);
     }
     i_file.fclose(file);
+    printf("Model %s has \n"
+           "  x-range (%.3f,%.3f)\n"
+           "  y-range (%.3f,%.3f)\n"
+           "  z-range (%.3f,%.3f)\n",
+           szFileName,
+           m_xrange.first,
+           m_xrange.second,
+           m_yrange.first,
+           m_yrange.second,
+           m_zrange.first,
+           m_zrange.second);
     return true;
 }

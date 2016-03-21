@@ -24,7 +24,7 @@ void draw_sample_image(const char * filename)
     rend.draw_line(img, 999, 999, 999, 0,   0xFF0000FF);
     rend.draw_line(img, 999, 0,   0,   0,   0xFF0000FF);
 
-    rend.fill_triangle(img, 
+    rend.fill_triangle_barycentric(img, 
                         100, 100,
                         50,  200,
                         150, 240,
@@ -56,8 +56,8 @@ int main(int argc, char ** argv)
         PngImage img(1000,1000, &i_libpng, &i_file);
         Renderer rend;
         //rend.render_random_color_model(img, model);
-        //rend.render_wireframe_model(img, model);
         rend.render_flat_shaded_model(img, model, Vec3f(0,0,1));
+        //rend.render_wireframe_model(img, model);
         if(img.write("./foo.png"))
         {
             printf("Wrote an x-y plot of your model to ./foo.png!\n");

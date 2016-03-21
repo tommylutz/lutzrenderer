@@ -2,7 +2,7 @@
 #define __VEC3_H_
 
 #include <math.h>
-
+#include <iostream>
 
 template<typename T>
 class Vec3
@@ -106,7 +106,17 @@ Vec3<T> operator*(const Vec3<T>& vec, double d)
                    vec.k()*d);
 }
 
+template <typename T>
+std::ostream& operator << (std::ostream& strm, const Vec3<T> & vec)
+{
+    strm << "(" << vec.x() << "," << vec.y() << "," << vec.z() << ")";
+    return strm;
+}
+
 typedef Vec3<double> Vec3f;
+
+
+
 
 
 #endif
