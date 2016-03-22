@@ -33,6 +33,13 @@ public:
                    double x1, double y1,
                    double x2, double y2,
                    const Color& color);
+
+    void fill_triangle_barycentric_zbuf(ImageInterface &img,
+                   const Vec3f& p1,
+                   const Vec3f& p2,
+                   const Vec3f& p3,
+                   const Color& color);
+                   
     template <typename T>
     void fill_triangle(ImageInterface & img,
                        const T& p1,

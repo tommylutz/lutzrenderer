@@ -70,6 +70,72 @@ void Renderer::draw_line(ImageInterface& img,
     return;
 }
 
+void Renderer::fill_triangle_barycentric_zbuf(ImageInterface &img,
+                   const Vec3f& p1,
+                   const Vec3f& p2,
+                   const Vec3f& p3,
+                   const Color& color)
+{
+    const double x0 = p1.x();
+    const double y0 = p1.y();
+    const double x1 = p2.x();
+    const double y1 = p2.y();
+    const double x2 = p3.x();
+    const double y2 = p3.y();
+    const int x_min = std::max(0,(int)floor(std::min(x0,std::min(x1,x2))));
+    const int x_max = std::min(img.width()-1,(int)ceil(std::max(x0,std::max(x1,x2))));
+    const int y_min = std::max(0,(int)floor(std::min(y0,std::min(y1,y2))));
+    const int y_max = std::min(img.height()-1,(int)ceil(std::max(y0,std::max(y1,y2))));
+    
+    /*printf("Fill triangle bounding box (%d->%d) y (%d->%d)\n",x_min,x_max,y_min,y_max);
+    printf("Triangle: (%.3f,%.3f), (%.3f,%.3f), (%.3f,%.3f)\n",
+            x0,y0,
+            x1,y1,
+            x2,y2);*/
+
+    for(int y=y_min; y<=y_max; ++y)
+    {
+        for(int x=x_min; x<=x_max; ++x)
+        {
+            const Vec3f v1(x2-x0, x1-x0, x0-(double)x);
+            const Vec3f v2(y2-y0, y1-y0, y0-(double)y);
+            const Vec3f crossprod = v1^v2;
+            if(std::abs(crossprod.z()) >= 0.01)
+            {
+                Vec3f barycoords(1. - (crossprod.x() + crossprod.y())/crossprod.z(),
+                                 crossprod.y()/crossprod.z(),
+                                 crossprod.x()/crossprod.z());
+                /*std::cout << "x=" << x << ", y=" << y 
+                          << ", Crossproduct of " << v1 << " and " << v2 
+                          << " is " << crossprod << ", bary: " << barycoords << ": ";*/
+                const Vec3f z_values(p1.z(), p2.z(), p3.z());
+                float z_value = z_values * barycoords;
+
+                if(barycoords.x() >= 0 &&
+                   barycoords.y() >= 0 &&
+                   barycoords.z() >= 0)
+                {
+                    img.set_pixel_zbuf(x,y,z_value,color);
+                }
+                else
+                {
+                }
+
+            }
+            else
+            {
+                printf("ERROR: Found degenerate triangle\n");
+                std::cout << p1 << ", " << p2 << ", " << p3 << ", v1=" << v1 << ", v2=" << v2 << "\n";
+            }
+            
+        }
+    }
+    
+}
+
+
+
+
 void Renderer::fill_triangle_barycentric(ImageInterface &img,
                double x0, double y0, 
                double x1, double y1,
@@ -288,8 +354,7 @@ void Renderer::render_flat_shaded_model(ImageInterface & img,
                             graylevel<<8   |
                             graylevel<< 16 |
                             0xFF000000;
-
-            fill_triangle(img,
+            fill_triangle_barycentric_zbuf(img,
                           (v1+offset)*scale,
                           (v2+offset)*scale,
                           (v3+offset)*scale,
