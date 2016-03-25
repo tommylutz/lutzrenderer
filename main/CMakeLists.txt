@@ -3,4 +3,6 @@ ADD_EXECUTABLE(lutzrend.tsk
 
 TARGET_LINK_LIBRARIES(lutzrend.tsk
                       librend
-                      png )
+                      png
+                      tga_static
+                      )

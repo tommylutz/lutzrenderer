@@ -2,6 +2,7 @@
 #include <rend.h>
 #include <image_png.h>
 #include <model.h>
+#include <tga.h>
 
 void draw_sample_image(const char * filename)
 {

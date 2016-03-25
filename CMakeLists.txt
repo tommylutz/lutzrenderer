@@ -6,6 +6,9 @@ SET(CMAKE_CXX_FLAGS "-std=c++11")
 
 SET(CMAKE_BUILD_TYPE Debug)
 
+####################################
+# DOWNLOAD GOOGLE TEST FROM GITHUB #
+####################################
 CONFIGURE_FILE(gtest-download/CMakeLists.txt.in
                gtest-download/CMakeLists.txt)
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
@@ -14,15 +17,34 @@ EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} --build .
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gtest-download )
 
 SET(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
 ADD_SUBDIRECTORY(${CMAKE_BINARY_DIR}/googletest-src
                  ${CMAKE_BINARY_DIR}/googletest-build )
 
+####################################
+# DOWNLOAD LIBTGA FROM GITHUB #
+####################################
+CONFIGURE_FILE(libtga-download/CMakeLists.txt.in
+               libtga-download/CMakeLists.txt)
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/libtga-download )
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} --build .
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/libtga-download )
+
+ADD_SUBDIRECTORY(${CMAKE_BINARY_DIR}/libtga-src
+                 ${CMAKE_BINARY_DIR}/libtga-build )
+
+#####################################
+# DOWNLOAD TINYRENDERER FROM GITHUB #
+#####################################
 CONFIGURE_FILE(tinyrenderer-download/CMakeLists.txt.in
                tinyrenderer-download/CMakeLists.txt)
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tinyrenderer-download )
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} --build .
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tinyrenderer-download )
+
+#####################################
 
 PROJECT(LutzRenderer)
 
