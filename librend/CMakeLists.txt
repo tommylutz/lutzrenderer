@@ -2,6 +2,8 @@ SET(LIBREND_SRCS
     image_interface.h
     image_png.cpp
     image_png.h
+    image_tga.cpp
+    image_tga.h
     rend.cpp
     rend.h
     cursor.cpp
@@ -14,6 +16,8 @@ SET(LIBREND_SRCS
 ADD_LIBRARY(librend STATIC
             ${LIBREND_SRCS} )
 
+#ADD_DEPENDENCIES(librend tga)
+TARGET_LINK_LIBRARIES(librend tga)
 TARGET_INCLUDE_DIRECTORIES(librend PUBLIC
                            "${CMAKE_CURRENT_SOURCE_DIR}/"
                            "${CMAKE_CURRENT_SOURCE_DIR}/external_interfaces" )

@@ -16,6 +16,7 @@ public:
         }
     }
     virtual ~ImageInterface() { delete[] m_pzbuf; }
+    virtual bool get_pixel(int x, int y, Color& color_out) const { return false; }
     virtual void set_pixel(int x, int y, const Color& color) = 0;
     virtual void set_pixel_zbuf(int x, int y, float z, const Color& color)
     {
