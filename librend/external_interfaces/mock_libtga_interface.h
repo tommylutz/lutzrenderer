@@ -15,8 +15,8 @@ class Mocklibtga_Interface : public libtga_Interface {
       int(TGA *tga, tbyte **id));
   MOCK_METHOD3(TGAReadColorMap,
       int(TGA *tga, tbyte **cmap, tuint32 flags));
-  MOCK_METHOD4(TGAReadScanlines,
-      size_t(TGA *tga, tbyte *buf, size_t sln, size_t tuint32 flags));
+  MOCK_METHOD5(TGAReadScanlines,
+      size_t(TGA *tga, tbyte *buf, size_t sln, size_t n, tuint32 flags));
   MOCK_METHOD2(TGAReadImage,
       int(TGA *tga, TGAData *data));
   MOCK_METHOD1(TGAWriteHeader,
