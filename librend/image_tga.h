@@ -9,10 +9,12 @@
 class TgaImage : public ImageInterface
 {
 public:
+    TgaImage(const char * szFilename,
+             libtga_Interface * p_i_libtga);
+
     TgaImage(int width,
              int height,
-             libtga_Interface * p_i_libtga,
-             file_Interface * p_i_file);
+             libtga_Interface * p_i_libtga);
     virtual ~TgaImage();
     virtual void set_pixel(int x, int y, const Color& color);
     virtual bool get_pixel(int x, int y, Color& color_out) const;
@@ -22,7 +24,6 @@ public:
 private:
     //External Interfaces
     libtga_Interface * i_libtga;
-    file_Interface * i_file;
     unsigned int * m_image_data;
 };
 

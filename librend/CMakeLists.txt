@@ -17,7 +17,7 @@ ADD_LIBRARY(librend STATIC
             ${LIBREND_SRCS} )
 
 #ADD_DEPENDENCIES(librend tga)
-TARGET_LINK_LIBRARIES(librend tga)
+TARGET_LINK_LIBRARIES(librend tga_static)
 TARGET_INCLUDE_DIRECTORIES(librend PUBLIC
                            "${CMAKE_CURRENT_SOURCE_DIR}/"
                            "${CMAKE_CURRENT_SOURCE_DIR}/external_interfaces" )

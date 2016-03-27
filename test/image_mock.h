@@ -7,7 +7,7 @@
 class MockImage : public ImageInterface
 {
 public:
-    MockImage() : ImageInterface(0,0) { }
+    MockImage() : ImageInterface(1,1) { }
     MOCK_METHOD3(set_pixel, void (int,int,const Color& color));
     virtual ~MockImage() {}
 

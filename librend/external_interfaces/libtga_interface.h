@@ -7,7 +7,7 @@ class libtga_Interface
 {
 public:
     virtual ~libtga_Interface() { }
-    virtual TGA* TGAOpen (char *name, char *mode)
+    virtual TGA* TGAOpen (const char *name, const char *mode)
     {
         return ::TGAOpen(name,mode);
     }

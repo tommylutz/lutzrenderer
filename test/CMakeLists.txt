@@ -5,6 +5,7 @@ rend.t.cpp
 model.t.cpp
 cursor.t.cpp
 vec3.t.cpp
+image_tga.t.cpp
 )
 
 TARGET_LINK_LIBRARIES(rendtest.t.tsk

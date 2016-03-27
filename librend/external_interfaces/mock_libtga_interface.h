@@ -6,7 +6,7 @@
 class Mocklibtga_Interface : public libtga_Interface {
  public:
   MOCK_METHOD2(TGAOpen,
-      TGA*(char *name, char *mode));
+      TGA*(const char *name, const char *mode));
   MOCK_METHOD1(TGAOpenFd,
       TGA*(FILE *fd));
   MOCK_METHOD1(TGAReadHeader,
