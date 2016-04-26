@@ -268,8 +268,8 @@ TEST(RendererFillTest, FillTriangleSinglePixel)
     EXPECT_CALL(img, set_pixel(10,10,255)).Times(1);
     Renderer rend;
     rend.fill_triangle(img, 
-                       10,10,
-                       10,10,
+                       9.99,10,
+                       10,10.01,
                        10,10,
                        255);
 }
@@ -277,21 +277,21 @@ TEST(RendererFillTest, FillTriangleSinglePixel)
 TEST(RendererFillTest, FillTriangle3Pixels)
 {
     MockImage img;
-    EXPECT_CALL(img, set_pixel(-1,5,255)).Times(1);
-    EXPECT_CALL(img, set_pixel(0,5,255)).Times(1);
-    EXPECT_CALL(img, set_pixel(-1,6,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(1,5,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(2,5,255)).Times(1);
+    EXPECT_CALL(img, set_pixel(1,6,255)).Times(1);
     Renderer rend;
     rend.fill_triangle(img, 
-                       -1,5,
-                       0,5,
-                       -1,6,
+                       1,5,
+                       2,5,
+                       1,6,
                        255);
 }
 
 TEST(RendererFillTest, FillTriangleWhereNextPixelIsSameForBothCursors)
 {
     MockImage img;
-    EXPECT_CALL(img, set_pixel(_,_,_)).Times(AtLeast(150));
+    EXPECT_CALL(img, set_pixel(_,_,_)).Times(AtLeast(103));
     Renderer rend;
     rend.fill_triangle(img,
                        1,0,

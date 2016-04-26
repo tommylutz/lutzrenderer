@@ -31,6 +31,12 @@ void draw_sample_image(const char * filename)
                         150, 240,
                         0xFF00FF00);
 
+    rend.fill_triangle(img,
+                       2,0,
+                       0,100,
+                       5,100,
+                       0xFFFFFFFF);
+
     img.write(filename);
 }
 
