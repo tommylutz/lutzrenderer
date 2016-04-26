@@ -37,25 +37,38 @@ TgaImage::TgaImage(const char * szFilename,
     
     if(rc == TGA_OK)
     {
-        printf("READ TEH TGA IMAGE!!\n");
+        /*printf("READ THE TGA IMAGE!!\n");
         printf("image id: %p\n",tgaData.img_id);
         printf("cmap: %p\n",tgaData.cmap);
         printf("img_data: %p\n",tgaData.img_data);
         printf("depth: %d\n",tga->hdr.depth);
         printf("width: %d\n",tga->hdr.width);
-        printf("height: %d\n",tga->hdr.height);
+        printf("height: %d\n",tga->hdr.height);*/
+        m_image_data = new unsigned int [tga->hdr.width * tga->hdr.height];
     
         ImageInterface::init(tga->hdr.width,
                              tga->hdr.height);
 
-        for(int i=0; i< 64; ++i)
+        for(int pxl=0; pxl< tga->hdr.width*tga->hdr.height; ++pxl)
         {
-            printf("%.2x ",tgaData.img_data[i]);
-            if( (i+1)%8 == 0 )
-                printf("  ");
-            if( (i+1)%32 == 0)
-                printf("\n");
+            int idx = pxl*3;
+            Color color = 0xFF000000;
+            color |= tgaData.img_data[idx];
+            color |= tgaData.img_data[idx+1]<<8;
+            color |= tgaData.img_data[idx+2]<<16;
+
+            const int x = pxl%tga->hdr.width;
+            const int y = pxl/tga->hdr.height;
+            set_pixel(x,y,color);
+            /*printf("At (%d,%d), pixel is %.8x\n",
+                    x, y, color);
+            Color clr;
+            if(get_pixel(x,y,clr))
+                printf("Got pixel %.8x\n",clr);
+            else
+                printf("Failed to get pixel\n");*/
         }
+
     }
     else
     {
@@ -76,6 +89,7 @@ TgaImage::~TgaImage()
 
 void TgaImage::set_pixel(int x, int y, const Color& color)
 {
+    assert(m_image_data);
     if(x>=0 && x < m_width &&
        y>=0 && y < m_height)
     {
@@ -85,6 +99,12 @@ void TgaImage::set_pixel(int x, int y, const Color& color)
 
 bool TgaImage::get_pixel(int x, int y, Color& color_out) const
 {
+    assert(m_image_data);
+    if(x < m_width and y < m_height)
+    {
+        color_out = m_image_data[x+y*m_height];
+        return true;
+    }
     return false;
 }
 
